@@ -11,6 +11,7 @@ function Board(props) {
     const {getFullList} = props
     const data = props.store
 
+    const cryptoInfo = []
     const arrayInfo = []
 
     useEffect(() => {
@@ -19,17 +20,19 @@ function Board(props) {
 
     }, [getFullList]);
 
-    console.log("DATA", data)
 
     cryptoCurrencies.map(crypto => {
         if (data[crypto]) {
-            arrayInfo.push(crypto)
-            data[crypto].map((element) => {
-                console.log(element[0])
-                arrayInfo.push(element[1])
+            cryptoInfo.push(crypto)
+            data[crypto].map((element, index) => {
+                if (index !== 0) {
+                    arrayInfo.push(element[1])
+                }
+
             })
         }
     })
+    console.log("cryptoInfo", cryptoInfo)
 
     console.log("arrayInfo", arrayInfo)
 
