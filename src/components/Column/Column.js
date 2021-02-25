@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Task from "../Task/Task";
 import {v4 as uuidv4} from 'uuid';
 import {getList} from "../../redux/createAction";
@@ -6,39 +6,19 @@ import {connect} from "react-redux";
 
 
 function Column(props) {
-    const {columnIndex} = props
-    const totalLength = props.store[0].length + props.store[1].length + props.store[2].length + props.store[3].length
-    const setCSSPriorityColor = () => {
-        let titleClassName = 'font-weight-bold text-dark  text-secondary mb-2 ';
-        switch (props.columnIndex) {
-            case 0:
-                titleClassName += 'bg-secondary'
-                break
-            case 1:
-                titleClassName += 'bg-primary'
-                break
-            case 2:
-                titleClassName += 'bg-warning'
-                break
-            case 3:
-                titleClassName += 'bg-success'
-                break
-            default:
-                break
-        }
-        return titleClassName
-    }
+    const data = props.store
+    const shortCode = props.feature.split(" ").join("")
+    const arrayInfo = []
 
 
     return (
-        <div  className="text">
-            <center > {props.feature}</center>
-            {/*<p className={setCSSPriorityColor()}>({props.store[columnIndex].length} of {totalLength})</p>*/}
-            {/*{props.store[columnIndex].map((element, index) =>*/}
-            {/*    (*/}
-            {/*        <Task key={uuidv4()} element={element} index={index} columnIndex={columnIndex}/>*/}
-            {/*    )*/}
-            {/*)}*/}
+        <div className="text">
+            <center> {props.feature}</center>
+            {arrayInfo.map((value, index) =>
+                (
+                    <Task key={uuidv4()} element={value}/>
+                )
+            )}
 
         </div>
     );

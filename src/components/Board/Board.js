@@ -2,21 +2,36 @@ import React, {useEffect} from 'react';
 
 import {v4 as uuidv4} from 'uuid';
 import Column from "../Column/Column";
-import {features} from "../../utils/priority"
+import {cryptoCurrencies, features} from "../../utils/priority"
 import {connect} from "react-redux";
-import {getList} from "../../redux/createAction";
 import "./Board.css"
 
 
 function Board(props) {
     const {getFullList} = props
+    const data = props.store
 
+    const arrayInfo = []
 
     useEffect(() => {
         getFullList()
 
+
     }, [getFullList]);
 
+    console.log("DATA", data)
+
+    cryptoCurrencies.map(crypto => {
+        if (data[crypto]) {
+            arrayInfo.push(crypto)
+            data[crypto].map((element) => {
+                console.log(element[0])
+                arrayInfo.push(element[1])
+            })
+        }
+    })
+
+    console.log("arrayInfo", arrayInfo)
 
     return (
         <div className="board">
@@ -27,7 +42,9 @@ function Board(props) {
                         <div className="status-col">
 
                             <Column key={uuidv4()}
-                                    feature={feature} columnIndex={index}/>
+                                    feature={feature}
+                                    arrayInfo={arrayInfo.length !== 0 ? arrayInfo : null}
+                            />
                         </div>
                     )
                 })
@@ -45,15 +62,7 @@ const mapStateToProps = (state) => ({
 
 
 const mapDispatchToProps = (dispatch) => ({
-    getFullList: () => dispatch(getList()),
-    dragSameColumn: (column, indexToRemove, indexToInsert) => dispatch({
-        type: 'DRAG_END_SAME_COLUMN',
-        payload: {column: column, indexToRemove: indexToRemove, indexToInsert: indexToInsert}
-    }),
-    dragDiffColumn: (sourceColumn, destColumn, destIndex, sourceIndex) => dispatch({
-        type: 'DRAG_END_DIFFERENT_COLUMN',
-        payload: {sourceColumn: sourceColumn, destColumn: destColumn, destIndex: destIndex, sourceIndex: sourceIndex}
-    })
+    getFullList: () => dispatch({type: "GET_STATE"}),
 
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

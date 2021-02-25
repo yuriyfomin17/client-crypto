@@ -1,106 +1,56 @@
 import axios from "axios";
+import {cryptoCurrencies, priceSymbols, features} from "../utils/priority";
 
 
-const initialState = {
+let initialState = {
     0: [],
-    1: [],
-    2: [],
-    3: [],
-
 };
-const sameColumn = (id, columnNumber, destinationIndex) => {
-    axios({
-        url: "https://kanban-board-server-dnd.herokuapp.com/order/sameColumn",
-        method: 'PATCH',
-        data: {
-            id: id,
-            column: columnNumber,
-            destination: destinationIndex
 
-        },
-    })
-        .catch(function (error) {
-            console.log(error)
-        })
+// const obj = {};
+// obj['fsyms'] = fsyms;
+// obj['tsyms'] = tsyms;
+// obj['CHANGE24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['CHANGE24HOUR'];
+// obj['OPEN24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['OPEN24HOUR'];
+// obj['VOLUME24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['VOLUME24HOUR'];
+// obj['VOLUME24HOURTO'] = response.data['DISPLAY'][fsyms][tsyms]['VOLUME24HOURTO'];
+// obj['LOW24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['LOW24HOUR'];
+// obj['HIGH24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['HIGH24HOUR'];
+// obj['PRICE'] = response.data['DISPLAY'][fsyms][tsyms]['PRICE'];
+// obj['SUPPLY'] = response.data['DISPLAY'][fsyms][tsyms]['SUPPLY'];
+// obj['MKTCAP'] = response.data['DISPLAY'][fsyms][tsyms]['MKTCAP'];
 
-}
-const differentColumn = (id, destinationIndex, columnDestination, columnSource) => {
-    axios({
-        url: "https://kanban-board-server-dnd.herokuapp.com/order/differentColumn",
-        method: 'PATCH',
-        data: {
-            id: id,
-            destination: destinationIndex,
-            columnDestination: columnDestination,
-            columnSource: columnSource
-        },
-    })
-        .catch(function (error) {
-            console.log(error)
-        })
-
-}
-const todo = (state = initialState, action) => {
+const crypto = (state = initialState, action) => {
     switch (action.type) {
-        case 'DRAG_END_SAME_COLUMN':
-            console.log("Index to remove", action.payload.indexToRemove)
-            console.log("Index to insert", action.payload.indexToInsert)
-            const [removed] = state[action.payload.column].splice(action.payload.indexToRemove, 1)
-            state[action.payload.column].splice(action.payload.indexToInsert, 0, removed)
-            let columnNumber = Number(action.payload.column) + 1
-
-
-
+        case 'GET_CRYPTO_PRICE':
+            const obj = {}
+            console.log('ACTION', action.payload)
+            for (let i = 0; i < cryptoCurrencies.length; i++) {
+                const crypto = cryptoCurrencies[i];
+                if (action.payload[crypto]) {
+                    obj[crypto] = []
+                }
+                for (let k = 0; k < priceSymbols.length; k++) {
+                    const priceSymbol = priceSymbols[k]
+                    if (action.payload[crypto] && action.payload[crypto][priceSymbol]) {
+                        for (let n = 1; n < features.length; n++) {
+                            const currString = features[n].split(" ").join("")
+                            console.log(action.payload[crypto][priceSymbol][currString])
+                            const currObj = []
+                            currObj.push(currString)
+                            currObj.push(action.payload[crypto][priceSymbol][currString])
+                            obj[crypto].push(currObj)
+                        }
+                    }
+                }
+            }
             // deleteItem(removed.id, columnNumber).then(r => console.log('Success'))
             // insertItem(removed, columnNumber, action.payload.indexToInsert).then(r => console.log('Success'))
-            sameColumn(removed._id, columnNumber, action.payload.indexToInsert)
-
-            return {
-                ...state,
-                0: [...state["0"]],
-                1: [...state["1"]],
-                2: [...state["2"]],
-                3: [...state["3"]],
-            }
-        case 'DRAG_END_DIFFERENT_COLUMN':
-
-            const [removedSource] = state[action.payload.sourceColumn].splice(action.payload.sourceIndex, 1)
-            state[action.payload.destColumn].splice(action.payload.destIndex, 0, removedSource)
-            console.log("removedSource", removedSource)
+            initialState = obj
+            return obj
 
 
-            differentColumn(removedSource._id, action.payload.destIndex, Number(action.payload.destColumn) + 1, Number(action.payload.sourceColumn) + 1)
-            return {
-                ...state,
-                0: [...state["0"]],
-                1: [...state["1"]],
-                2: [...state["2"]],
-                3: [...state["3"]],
-            }
-        case 'GET_LIST_FROM_SERVER':
-            let tasks = action.payload[0]
-            let order = action.payload[1]
-            console.log("ORDER", order)
-            for (let column = 0; column < 4; ++column) {
-                let currColumn = order[column].order
-                let currResult = []
-                currColumn.map(function (element) {
-                    let currElem = tasks.find(el => el._id === element._id)
-                    currResult.push(currElem)
-                    return null
-                })
-                state[column] = currResult
-
-            }
-            console.log("STATE", state)
-            return {
-                ...state,
-                0: [...state["0"]],
-                1: [...state["1"]],
-                2: [...state["2"]],
-                3: [...state["3"]],
-            }
-
+        case "GET_STATE":
+            return initialState
 
         default:
             return state
@@ -110,4 +60,4 @@ const todo = (state = initialState, action) => {
 
 }
 
-export default todo
+export default crypto

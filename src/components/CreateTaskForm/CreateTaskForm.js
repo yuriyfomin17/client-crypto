@@ -1,45 +1,63 @@
 import React, {useState} from 'react';
 import Modal from "react-bootstrap/Modal";
-import {priceCurrencies, cryptoCurrencies} from "../../utils/priority";
+import {priceCurrencies, cryptoCurrencies, priceSymbols} from "../../utils/priority";
 import {connect} from "react-redux";
 import axios from 'axios';
-import {getList} from "../../redux/createAction";
 
 
 function CreateTaskForm(props) {
+
     const cssCryptoNotActive = "list-group-item list-group-item-action"
     const cssCryptoActive = "list-group-item list-group-item-action active"
     const {isCreateTaskMode, setCreateTaskMode} = props;
     const [price, setPrice] = useState(priceCurrencies[0]);
-    const [cryptoCss, setCSSCrypto] = useState(new Array(8).fill(cssCryptoNotActive))
+    const [cryptoCss, setCSSCrypto] = useState(["list-group-item list-group-item-action active",...new Array(7).fill(cssCryptoNotActive)])
 
-    const setCryptoCSS = (index) => {
+    const [requestCryptoArray, setCryptoRequest] = useState(["BTC"])
+    const [requestPrice, setRequestPrice] = useState(priceSymbols[0])
+
+
+    const setCryptoCSS = (crypto, index) => {
         const copyCSS = cryptoCss.slice()
+        const copyRequestCryptoArray = requestCryptoArray.slice()
+
         if (copyCSS[index] === cssCryptoActive) {
             copyCSS[index] = cssCryptoNotActive
         } else {
             copyCSS[index] = cssCryptoActive
         }
+
+        if (copyRequestCryptoArray.includes(crypto)) {
+            const index = copyRequestCryptoArray.indexOf(crypto)
+            copyRequestCryptoArray.splice(index, 1)
+        } else {
+            copyRequestCryptoArray.push(crypto)
+        }
+        setCryptoRequest(copyRequestCryptoArray)
         setCSSCrypto(copyCSS)
+
+    }
+    const setPriceRequest = (event) => {
+        setPrice(event.target.value)
+        const index = priceCurrencies.indexOf(event.target.value)
+        setRequestPrice(priceSymbols[index])
+
     }
     const onCancel = () => {
         setCreateTaskMode(false);
 
     }
 
-    const addNewTask = async () => {
+    const setCurrencies = async () => {
+        const urlRequest = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${requestCryptoArray.join(',')}&tsyms=${requestPrice}`;
+        console.log("URL", urlRequest)
         await axios({
-            url: 'http://localhost:5000/todo/create',
-            method: 'POST',
-            data: {
-
-                priority: price,
-                shrink: false,
-                done: false
-            },
+            url: urlRequest,
+            method: 'GET',
         })
             .then(res => {
-                props.getFullList()
+                console.log(res.data)
+                props.getFullList(res.data['DISPLAY'])
             })
             .catch(error => {
                 console.log(error)
@@ -54,24 +72,25 @@ function CreateTaskForm(props) {
                 <div className="form-group">
                     <label htmlFor="priority">Currency Price</label>
                     <select id="priority" className="form-control" defaultValue={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            onChange={(e) => setPriceRequest(e)}
                     >
                         {
-                            priceCurrencies.map((priority) => {
-                                return <option key={priority} value={priority}>{priority}</option>;
+                            priceCurrencies.map((price) => {
+                                return <option key={price} value={price}>{price}</option>;
                             })
                         }
                     </select>
                 </div>
                 <div className="list-group">
-                    <label htmlFor="crypto">Choose Crypto Currency</label>
+                    <label htmlFor="crypto">Choose CryptoCurrencies</label>
                     {cryptoCurrencies.map((crypto, index) => {
-                        return <a className={cryptoCss[index]} onClick={() => setCryptoCSS(index)}> {crypto}</a>
+                        return <a className={cryptoCss[index]} onClick={() => setCryptoCSS(crypto, index)}> {crypto}</a>
                     })}
                 </div>
+                <br/>
                 <button className="btn btn-secondary float-right ml-2" onClick={onCancel}>Cancel
                 </button>
-                <button className="btn btn-primary float-right" onClick={addNewTask}>Save</button>
+                <button className="btn btn-primary float-right" onClick={setCurrencies}>Save</button>
             </div>
         </Modal>
     );
@@ -81,7 +100,7 @@ const mapStateToProps = (state) => ({
     store: state
 });
 const mapDispatchToProps = (dispatch) => ({
-    getFullList: () => dispatch(getList()),
+    getFullList: (data) => dispatch({ type: 'GET_CRYPTO_PRICE', payload: data }),
 
 });
 

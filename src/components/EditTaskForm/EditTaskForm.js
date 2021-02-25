@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import Modal from "react-bootstrap/Modal";
 import {cryptoCurrencies} from "../../utils/priority";
-import {doneStatus} from "../../utils/priority";
 import axios from 'axios';
 import {connect} from "react-redux";
 import {getList} from "../../redux/createAction";
@@ -11,7 +10,6 @@ function EditTaskForm(props) {
     const {_id, name, priority} = element;
     const [taskTitle, setTaskTitle] = useState(name);
     const [taskPriority, setTaskPriority] = useState(priority);
-    const [taskDoneStatus, setDoneStatus] = useState(doneStatus[1]);
     const onTitleChange = (e) => {
         setTaskTitle(e.target.value);
     }
@@ -21,9 +19,7 @@ function EditTaskForm(props) {
     const onPriorityChange = (e) => {
         setTaskPriority(e.target.value);
     }
-    const onStatusChange = (e) => {
-        setDoneStatus(e.target.value);
-    }
+
 
 
     const isSaveDisabled = taskTitle.trim() === '';
@@ -43,7 +39,6 @@ function EditTaskForm(props) {
                 index: index,
                 column: column,
                 name: taskTitle,
-                done: taskDoneStatus==='Done',
                 shrink: shrink,
                 priority: taskPriority
 
@@ -57,7 +52,6 @@ function EditTaskForm(props) {
             })
         setTaskTitle(taskTitle);
         setTaskPriority(taskPriority);
-        setDoneStatus(taskDoneStatus)
         setEditTaskMode(false);
 
     }
@@ -80,16 +74,7 @@ function EditTaskForm(props) {
                         }
                     </select>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="priority">Status</label>
-                    <select id="priority" className="form-control" value={taskDoneStatus} onChange={onStatusChange}>
-                        {
-                            doneStatus.map((done) => {
-                                return <option key={done} value={done}>{done}</option>;
-                            })
-                        }
-                    </select>
-                </div>
+
                 <button onClick={onHide} className="btn btn-secondary float-right ml-2">Cancel</button>
                 <button onClick={onSave} className="btn btn-primary float-right" disabled={isSaveDisabled}>Save
                 </button>
