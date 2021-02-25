@@ -1,0 +1,19 @@
+.board {
+    width: 80%;
+    display: flex;
+    margin-left: 200px;
+    margin-right: 100px;
+}
+
+.status-col {
+    width: 10%;
+    min-height: 600px;
+    padding: 10px;
+    display: block;
+    transition: 0.8s;
+    border-radius: 2px;
+    margin: 25px 5px 5px 5px;
+    background: #bee1ff;
+}
+
+

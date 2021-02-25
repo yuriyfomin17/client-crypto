@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
-import {getList} from "../redux/createAction";
+import {getList} from "../../redux/createAction";
 import {connect} from "react-redux";
 
 

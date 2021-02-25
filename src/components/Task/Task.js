@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Draggable} from "react-beautiful-dnd";
-import EditTaskForm from "./EditTaskForm";
-import DeleteTask from "./DeleteTask";
+import EditTaskForm from "../EditTaskForm/EditTaskForm";
+import DeleteTask from "../DeleteTask/DeleteTask";
 import {v4 as uuidv4} from 'uuid';
 import axios from "axios";
-import {getList} from "../redux/createAction";
+import {getList} from "../../redux/createAction";
 import {connect} from "react-redux";
 
 

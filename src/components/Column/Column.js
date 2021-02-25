@@ -1,7 +1,7 @@
 import React from "react";
-import Task from "./Task";
+import Task from "../Task/Task";
 import {v4 as uuidv4} from 'uuid';
-import {getList} from "../redux/createAction";
+import {getList} from "../../redux/createAction";
 import {connect} from "react-redux";
 
 
@@ -31,16 +31,16 @@ function Column(props) {
 
 
     return (
-        <>
-            <h3 className="color-bold-black font-weight-bold"> {props.status}</h3>
-            <p className={setCSSPriorityColor()}>({props.store[columnIndex].length} of {totalLength})</p>
-            {props.store[columnIndex].map((element, index) =>
-                (
-                    <Task key={uuidv4()} element={element} index={index} columnIndex={columnIndex}/>
-                )
-            )}
+        <div  className="text">
+            <center > {props.feature}</center>
+            {/*<p className={setCSSPriorityColor()}>({props.store[columnIndex].length} of {totalLength})</p>*/}
+            {/*{props.store[columnIndex].map((element, index) =>*/}
+            {/*    (*/}
+            {/*        <Task key={uuidv4()} element={element} index={index} columnIndex={columnIndex}/>*/}
+            {/*    )*/}
+            {/*)}*/}
 
-        </>
+        </div>
     );
 }
 
