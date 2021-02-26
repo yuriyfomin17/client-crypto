@@ -1,8 +1,8 @@
 .board {
-    width: 80%;
-    display: flex;
-    margin-left: 200px;
-    margin-right: 100px;
+    /*width: 80%;*/
+    /*display: flex;*/
+    /*margin-left: 200px;*/
+    /*margin-right: 100px;*/
 }
 
 .status-col {
@@ -14,6 +14,15 @@
     border-radius: 2px;
     margin: 25px 5px 5px 5px;
     background: #bee1ff;
+}
+
+table, th, td {
+    border: 1px solid black;
+    display: flex;
+}
+
+table {
+    width: 100%;
 }
 
 

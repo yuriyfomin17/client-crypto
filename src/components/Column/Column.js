@@ -1,26 +1,46 @@
-import React, {useState} from "react";
-import Task from "../Task/Task";
+import React from "react";
 import {v4 as uuidv4} from 'uuid';
 import {getList} from "../../redux/createAction";
 import {connect} from "react-redux";
+import {features} from "../../utils/priority";
+import Task from "../Task/Task";
 
 
 function Column(props) {
-    const data = props.store
-    const shortCode = props.feature.split(" ").join("")
-    const arrayInfo = []
-
-
+    const {cryptoArray, arrayInfo} = props
     return (
-        <div className="text">
+        <>
             <center> {props.feature}</center>
-            {arrayInfo.map((value, index) =>
-                (
-                    <Task key={uuidv4()} element={value}/>
-                )
-            )}
+            <div className="-black-tie shadow task bg-white">
 
-        </div>
+                {props.feature === features[0] ?
+                    (<div className="text-container">
+                            {
+                                cryptoArray.map(value => (
+                                    (
+
+                                        <Task key={uuidv4()} value={value}/>
+                                    )
+                                ))
+                            }
+                        </div>
+                    ) : (
+                        <div className="text-container">
+                            {
+                                arrayInfo.map(value => (
+                                    (
+                                        <Task key={uuidv4()} value={value}/>
+                                    )
+                                ))
+                            }
+                        </div>
+                    )
+                }
+            </div>
+
+
+        </>
+
     );
 }
 

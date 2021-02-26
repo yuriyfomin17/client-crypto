@@ -1,4 +1,3 @@
-import axios from "axios";
 import {cryptoCurrencies, priceSymbols, features} from "../utils/priority";
 
 
@@ -23,7 +22,6 @@ const crypto = (state = initialState, action) => {
     switch (action.type) {
         case 'GET_CRYPTO_PRICE':
             const obj = {}
-            console.log('ACTION', action.payload)
             for (let i = 0; i < cryptoCurrencies.length; i++) {
                 const crypto = cryptoCurrencies[i];
                 if (action.payload[crypto]) {
@@ -34,7 +32,6 @@ const crypto = (state = initialState, action) => {
                     if (action.payload[crypto] && action.payload[crypto][priceSymbol]) {
                         for (let n = 1; n < features.length; n++) {
                             const currString = features[n].split(" ").join("")
-                            console.log(action.payload[crypto][priceSymbol][currString])
                             const currObj = []
                             currObj.push(currString)
                             currObj.push(action.payload[crypto][priceSymbol][currString])
@@ -43,13 +40,11 @@ const crypto = (state = initialState, action) => {
                     }
                 }
             }
-            // deleteItem(removed.id, columnNumber).then(r => console.log('Success'))
-            // insertItem(removed, columnNumber, action.payload.indexToInsert).then(r => console.log('Success'))
             initialState = obj
             return obj
 
 
-        case "GET_STATE":
+        case "GET_CRYPTO_PRICE_DATABASE":
             return initialState
 
         default:

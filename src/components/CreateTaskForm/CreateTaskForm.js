@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import {priceCurrencies, cryptoCurrencies, priceSymbols} from "../../utils/priority";
 import {connect} from "react-redux";
 import axios from 'axios';
+import {v4 as uuidv4} from 'uuid';
 
 
 function CreateTaskForm(props) {
@@ -56,7 +57,7 @@ function CreateTaskForm(props) {
             method: 'GET',
         })
             .then(res => {
-                console.log(res.data)
+                console.log("SUCCESS API CALL")
                 props.getFullList(res.data['DISPLAY'])
             })
             .catch(error => {
@@ -76,7 +77,7 @@ function CreateTaskForm(props) {
                     >
                         {
                             priceCurrencies.map((price) => {
-                                return <option key={price} value={price}>{price}</option>;
+                                return <option key={uuidv4()} value={price}>{price}</option>;
                             })
                         }
                     </select>
@@ -84,7 +85,7 @@ function CreateTaskForm(props) {
                 <div className="list-group">
                     <label htmlFor="crypto">Choose CryptoCurrencies</label>
                     {cryptoCurrencies.map((crypto, index) => {
-                        return <a className={cryptoCss[index]} onClick={() => setCryptoCSS(crypto, index)}> {crypto}</a>
+                        return <button key={uuidv4()} className={cryptoCss[index]} onClick={() => setCryptoCSS(crypto, index)}> {crypto}</button>
                     })}
                 </div>
                 <br/>

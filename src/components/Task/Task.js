@@ -1,19 +1,14 @@
 import React from 'react';
 
 
-
-function Task(props) {
-    const {value} = props
-
-
+function Task({value}) {
     return (
         <div>
-
-            {value}
-
+            <th className="text-center p-2 font-weight-light">
+                {value}
+            </th>
         </div>
     );
 }
 
-export default Task
-
+export default Task;

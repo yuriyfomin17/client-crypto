@@ -1,3 +1,17 @@
-.text {
+.text-container {
     font-size:0.8rem;
+    display: table-column;
+    align-content: center;
+    background-color: white ;
+    margin: auto;
+    max-width: 100%;
+    height: auto;
+}
+
+table, th, td {
+    display: flex;
+}
+
+table {
+    width: 100%;
 }

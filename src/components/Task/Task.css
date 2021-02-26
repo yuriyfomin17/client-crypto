@@ -1,6 +1,9 @@
-.task {
-    margin: 0 auto 10px;
-    background-color: white;
-    max-width: 70%;
-    height: auto;
+
+
+table, th, td {
+    display: flex;
+}
+
+table {
+    width: 100%;
 }
