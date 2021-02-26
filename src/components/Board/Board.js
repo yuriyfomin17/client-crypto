@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {v4 as uuidv4} from 'uuid';
 import Column from "../Column/Column";
 import {cryptoCurrencies, features} from "../../utils/priority"
 import {connect} from "react-redux";
 import "./Board.css"
+import io from "socket.io-client";
 
 
 function Board(props) {
@@ -46,6 +47,14 @@ function Board(props) {
         }
 
     })
+    useEffect(() => {
+        const socket = io("http://localhost:5000", {transports: ['websocket']});
+
+        socket.on('change', (dataFromDB) => {
+            console.log('CHANGE', dataFromDB)
+            console.log("DATA", data)
+        })
+    }, [])
 
     return (
         <table className="board">

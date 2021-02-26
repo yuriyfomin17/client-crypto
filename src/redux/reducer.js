@@ -21,6 +21,7 @@ let initialState = {
 const crypto = (state = initialState, action) => {
     switch (action.type) {
         case 'GET_CRYPTO_PRICE':
+            console.log(action.payload)
             const obj = {}
             for (let i = 0; i < cryptoCurrencies.length; i++) {
                 const crypto = cryptoCurrencies[i];

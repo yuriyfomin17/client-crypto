@@ -4,15 +4,16 @@ import {priceCurrencies, cryptoCurrencies, priceSymbols} from "../../utils/prior
 import {connect} from "react-redux";
 import axios from 'axios';
 import {v4 as uuidv4} from 'uuid';
+import io from "socket.io-client";
 
 
-function CreateTaskForm(props) {
+function ApiModalWindow(props) {
 
     const cssCryptoNotActive = "list-group-item list-group-item-action"
     const cssCryptoActive = "list-group-item list-group-item-action active"
-    const {isCreateTaskMode, setCreateTaskMode} = props;
+    const {isSocketModal, setSocketModel} = props;
     const [price, setPrice] = useState(priceCurrencies[0]);
-    const [cryptoCss, setCSSCrypto] = useState(["list-group-item list-group-item-action active",...new Array(7).fill(cssCryptoNotActive)])
+    const [cryptoCss, setCSSCrypto] = useState(["list-group-item list-group-item-action active", ...new Array(7).fill(cssCryptoNotActive)])
 
     const [requestCryptoArray, setCryptoRequest] = useState(["BTC"])
     const [requestPrice, setRequestPrice] = useState(priceSymbols[0])
@@ -45,28 +46,25 @@ function CreateTaskForm(props) {
 
     }
     const onCancel = () => {
-        setCreateTaskMode(false);
+        setSocketModel(false);
 
     }
 
     const setCurrencies = async () => {
-        const urlRequest = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${requestCryptoArray.join(',')}&tsyms=${requestPrice}`;
-        console.log("URL", urlRequest)
-        await axios({
-            url: urlRequest,
-            method: 'GET',
+        const socket = io("http://localhost:5000", {transports: ['websocket']});
+        socket.emit('CRYPTO_GET_DATABSE',{
+            request:"GET CRYPTO"
         })
-            .then(res => {
-                console.log("SUCCESS API CALL")
-                props.getFullList(res.data['DISPLAY'])
-            })
-            .catch(error => {
-                console.log(error)
-            })
-        setCreateTaskMode(false);
+        socket.on('CRYPTO_GOT_FROM_DATABSE',(dataFromDB)=>{
+            console.log('CRYPTO_GOT_FROM_DATABSE',dataFromDB)
+        } )
+        socket.on('change',(dataFromDB)=>{
+            console.log('CHANGE',dataFromDB)
+        } )
+        setSocketModel(false);
     }
     return (
-        <Modal show={isCreateTaskMode} onHide={onCancel} centered>
+        <Modal show={isSocketModal} onHide={onCancel} centered>
             <div className="p-3">
                 <h4>Set Table</h4>
 
@@ -85,7 +83,8 @@ function CreateTaskForm(props) {
                 <div className="list-group">
                     <label htmlFor="crypto">Choose CryptoCurrencies</label>
                     {cryptoCurrencies.map((crypto, index) => {
-                        return <button key={uuidv4()} className={cryptoCss[index]} onClick={() => setCryptoCSS(crypto, index)}> {crypto}</button>
+                        return <button key={uuidv4()} className={cryptoCss[index]}
+                                       onClick={() => setCryptoCSS(crypto, index)}> {crypto}</button>
                     })}
                 </div>
                 <br/>
@@ -101,8 +100,8 @@ const mapStateToProps = (state) => ({
     store: state
 });
 const mapDispatchToProps = (dispatch) => ({
-    getFullList: (data) => dispatch({ type: 'GET_CRYPTO_PRICE', payload: data }),
+    getFullList: (data) => dispatch({type: 'GET_CRYPTO_PRICE', payload: data}),
 
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateTaskForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ApiModalWindow);
