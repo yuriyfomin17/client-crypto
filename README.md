@@ -48,7 +48,7 @@ When button "Configure DB Parameters" is pressed than 60 second timer is trigger
 
 Board.js allows to represent abstraction of board on which columns are stored. Column.js allows to store particular feature for given cryptocurrency.
 
-Redux folder has a classic representation of redux with reduce, store.
+Redux folder has a classic representation of redux with reducer, store.
 
 Front-end is deployed via Netlify on https://tender-poincare-6365f8.netlify.app
 
