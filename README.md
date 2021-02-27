@@ -37,32 +37,19 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Front CLinet Structure 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+"components" is key folder. Root component is App folder which has App.js. In App.js files Board.js, Column.js, Task.js, SocketModalWindow.js and ApiModalWindow.js are called. ApiModalWindow.js allows to make a call to API (provided by the test document) via library axios. Data from axios api call is processed by redux then transferred to other components from the store.
 
-### Code Splitting
+SocketModalWindow.js allows connecting to node.js server via the socket. SocketModalWindow.js allows to modify data that can be stored by MongoDB. Configuration talk between front and Mongo is made via node.js (socket)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+When button "Configure DB Parameters" is pressed than 60 second timer is triggered. After 60 seconds api call is made by the node.js server to the API (provided by the test document). Hence, button in App.js "Retrieve Data from Mongo DB" allows retrieving data from the MongoDB if the API fails.
 
-### Analyzing the Bundle Size
+Board.js allows to represent abstraction of board on which columns are stored. Column.js allows to store particular feature for given cryptocurrency.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+Redux folder has a classic representation of redux with reduce, store.
 
-### Making a Progressive Web App
+Front-end is deployed via Netlify on https://tender-poincare-6365f8.netlify.app
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
