@@ -38,7 +38,7 @@ Instead, it will copy all the configuration files and the transitive dependencie
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 
-### Front CLinet Structure 
+### Front-end Client Structure 
 
 "components" is key folder. Root component is App folder which has App.js. In App.js files Board.js, Column.js, Task.js, SocketModalWindow.js and ApiModalWindow.js are called. ApiModalWindow.js allows to make a call to API (provided by the test document) via library axios. Data from axios api call is processed by redux then transferred to other components from the store.
 
