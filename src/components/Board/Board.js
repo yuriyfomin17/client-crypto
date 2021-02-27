@@ -24,6 +24,7 @@ function Board(props) {
         if (data[crypto]) {
             cryptoInfo.push(crypto)
         }
+        return ''
     })
     features.map((feature, index) => {
         if (index !== 0) {
@@ -34,15 +35,18 @@ function Board(props) {
                     const [featureElement] = data[crypto].filter(el => el[0] === currShortCode)
                     // console.log("FEATURE ELEMENT", featureElement)
                     objInfo[featureElement[0]].push(featureElement[1])
+                    return ''
                 })
             } else {
                 cryptoInfo.map(crypto => {
                     const featureElement = data[crypto].filter(el => el[0] === currShortCode)
                     // console.log("FEATURE ELEMENT", featureElement)
                     objInfo[featureElement[0]].push(featureElement[1])
+                    return ''
                 })
             }
         }
+        return ''
 
     })
     useEffect(() => {

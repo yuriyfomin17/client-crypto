@@ -10,7 +10,7 @@ function SocketModalWindow(props) {
 
     const cssCryptoNotActive = "list-group-item list-group-item-action"
     const cssCryptoActive = "list-group-item list-group-item-action active"
-    const {isSocketModal, setSocketModel, setIndexDB, setRequestCryptoArrayApp, setRequestPriceApp,indexDB} = props;
+    const {isSocketModal, setSocketModel, setIndexDB, setRequestCryptoArrayApp, setRequestPriceApp} = props;
     const [price, setPrice] = useState(priceCurrencies[0]);
     const [cryptoCss, setCSSCrypto] = useState(["list-group-item list-group-item-action active", ...new Array(7).fill(cssCryptoNotActive)])
 

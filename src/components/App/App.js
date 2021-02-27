@@ -9,7 +9,7 @@ import {connect} from "react-redux";
 import io from "socket.io-client";
 import {host} from "../../utils/utils";
 
-function App(props, shouldRepeat = shouldRepeat) {
+function App(props, shouldRepeat) {
     const [isCreateTaskMode, setCreateTaskMode] = useState(false);
     const [isSocketModal, setSocketModel] = useState(false);
     const [indexDB, setIndexDB] = useState(false)
@@ -28,7 +28,7 @@ function App(props, shouldRepeat = shouldRepeat) {
     };
     const retrieveDataFromMongo = async () => {
         await axios({
-            url: 'http://localhost:5000/crypto/getAll',
+            url: 'https://crypto-service-yuriy-fomin.herokuapp.com/crypto/getAll',
             method: 'GET',
         })
             .then(res => {
