@@ -1,22 +1,22 @@
 import React, {useState} from 'react';
 import Modal from "react-bootstrap/Modal";
-import {priceCurrencies, cryptoCurrencies, priceSymbols} from "../../utils/priority";
+import {priceCurrencies, cryptoCurrencies, priceSymbols, host} from "../../utils/utils";
 import {connect} from "react-redux";
-import axios from 'axios';
 import {v4 as uuidv4} from 'uuid';
 import io from "socket.io-client";
 
 
-function ApiModalWindow(props) {
+function SocketModalWindow(props) {
 
     const cssCryptoNotActive = "list-group-item list-group-item-action"
     const cssCryptoActive = "list-group-item list-group-item-action active"
-    const {isSocketModal, setSocketModel} = props;
+    const {isSocketModal, setSocketModel, setIndexDB, setRequestCryptoArrayApp, setRequestPriceApp,indexDB} = props;
     const [price, setPrice] = useState(priceCurrencies[0]);
     const [cryptoCss, setCSSCrypto] = useState(["list-group-item list-group-item-action active", ...new Array(7).fill(cssCryptoNotActive)])
 
     const [requestCryptoArray, setCryptoRequest] = useState(["BTC"])
     const [requestPrice, setRequestPrice] = useState(priceSymbols[0])
+
 
 
     const setCryptoCSS = (crypto, index) => {
@@ -51,22 +51,28 @@ function ApiModalWindow(props) {
     }
 
     const setCurrencies = async () => {
-        const socket = io("http://localhost:5000", {transports: ['websocket']});
-        socket.emit('CRYPTO_GET_DATABSE',{
-            request:"GET CRYPTO"
+        const urlRequest = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${requestCryptoArray.join(',')}&tsyms=${requestPrice}`;
+        setRequestCryptoArrayApp(requestCryptoArray)
+        setRequestPriceApp(requestPrice)
+        const socket = io(host, {transports: ['websocket']});
+        socket.emit('CRYPTO_GET_DATABSE', {
+            request: "GET CRYPTO",
+            urlRequest: urlRequest,
+            cryptoAndCurrencyArray: requestCryptoArray,
+            requestPrice: requestPrice
+
         })
-        socket.on('CRYPTO_GOT_FROM_DATABSE',(dataFromDB)=>{
-            console.log('CRYPTO_GOT_FROM_DATABSE',dataFromDB)
-        } )
-        socket.on('change',(dataFromDB)=>{
-            console.log('CHANGE',dataFromDB)
-        } )
+        socket.on('CRYPTO_GOT_FROM_DATABSE', (dataFromDB) => {
+            console.log('CRYPTO_GOT_FROM_DATABSE', dataFromDB)
+
+        })
+        setIndexDB(true)
         setSocketModel(false);
     }
     return (
         <Modal show={isSocketModal} onHide={onCancel} centered>
             <div className="p-3">
-                <h4>Set Table</h4>
+                <h4>Configure Database Savings Parameters</h4>
 
                 <div className="form-group">
                     <label htmlFor="priority">Currency Price</label>
@@ -91,6 +97,7 @@ function ApiModalWindow(props) {
                 <button className="btn btn-secondary float-right ml-2" onClick={onCancel}>Cancel
                 </button>
                 <button className="btn btn-primary float-right" onClick={setCurrencies}>Save</button>
+
             </div>
         </Modal>
     );
@@ -99,9 +106,6 @@ function ApiModalWindow(props) {
 const mapStateToProps = (state) => ({
     store: state
 });
-const mapDispatchToProps = (dispatch) => ({
-    getFullList: (data) => dispatch({type: 'GET_CRYPTO_PRICE', payload: data}),
+const mapDispatchToProps = () => ({});
 
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ApiModalWindow);
+export default connect(mapStateToProps, mapDispatchToProps)(SocketModalWindow);

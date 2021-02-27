@@ -2,7 +2,7 @@ import React from "react";
 import {v4 as uuidv4} from 'uuid';
 import {getList} from "../../redux/createAction";
 import {connect} from "react-redux";
-import {features} from "../../utils/priority";
+import {features} from "../../utils/utils";
 import Task from "../Task/Task";
 
 

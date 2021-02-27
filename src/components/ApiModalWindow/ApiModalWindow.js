@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Modal from "react-bootstrap/Modal";
-import {priceCurrencies, cryptoCurrencies, priceSymbols} from "../../utils/priority";
+import {priceCurrencies, cryptoCurrencies, priceSymbols} from "../../utils/utils";
 import {connect} from "react-redux";
 import axios from 'axios';
 import {v4 as uuidv4} from 'uuid';

@@ -1,27 +1,18 @@
-import {cryptoCurrencies, priceSymbols, features} from "../utils/priority";
+import {cryptoCurrencies, priceSymbols, features} from "../utils/utils";
 
 
 let initialState = {
     0: [],
 };
 
-// const obj = {};
-// obj['fsyms'] = fsyms;
-// obj['tsyms'] = tsyms;
-// obj['CHANGE24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['CHANGE24HOUR'];
-// obj['OPEN24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['OPEN24HOUR'];
-// obj['VOLUME24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['VOLUME24HOUR'];
-// obj['VOLUME24HOURTO'] = response.data['DISPLAY'][fsyms][tsyms]['VOLUME24HOURTO'];
-// obj['LOW24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['LOW24HOUR'];
-// obj['HIGH24HOUR'] = response.data['DISPLAY'][fsyms][tsyms]['HIGH24HOUR'];
-// obj['PRICE'] = response.data['DISPLAY'][fsyms][tsyms]['PRICE'];
-// obj['SUPPLY'] = response.data['DISPLAY'][fsyms][tsyms]['SUPPLY'];
-// obj['MKTCAP'] = response.data['DISPLAY'][fsyms][tsyms]['MKTCAP'];
-
 const crypto = (state = initialState, action) => {
     switch (action.type) {
         case 'GET_CRYPTO_PRICE':
-            console.log(action.payload)
+            if (action.payload === undefined) {
+                initialState = {}
+                return {}
+            }
+            console.log("ACTION PAYLOAD", action.payload)
             const obj = {}
             for (let i = 0; i < cryptoCurrencies.length; i++) {
                 const crypto = cryptoCurrencies[i];
@@ -44,9 +35,38 @@ const crypto = (state = initialState, action) => {
             initialState = obj
             return obj
 
+        case 'GET_CRYPTO_PRICE_SOCKET':
+            const {payload} = action
+            const objSocket = {}
+            for (let k = 0; k < payload.length; k++) {
+                const [currCrypto] = payload[k]["arrayInfo"]
+                for (let i = 0; i < cryptoCurrencies.length; i++) {
 
-        case "GET_CRYPTO_PRICE_DATABASE":
-            return initialState
+                    const crypto = cryptoCurrencies[i];
+                    if (currCrypto["fsyms"] === crypto) {
+
+                        objSocket[crypto] = []
+
+                        for (let n = 1; n < features.length; n++) {
+                            const currString = features[n].split(" ").join("")
+                            const currObj = []
+                            currObj.push(currString)
+                            currObj.push(currCrypto[currString])
+                            objSocket[crypto].push(currObj)
+                        }
+                    }
+
+
+                }
+            }
+
+            initialState = objSocket
+            return objSocket
+
+
+        case "NULL_STATE":
+            initialState = {}
+            return {}
 
         default:
             return state

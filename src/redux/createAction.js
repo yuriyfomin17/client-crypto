@@ -1,19 +1,19 @@
 import axios from 'axios';
 
-export function getList  () {
+export function getList(urlRequest) {
 
     return (dispatch) => {
         axios({
-            url: 'https://kanban-board-server-dnd.herokuapp.com/todo/getAll',
-            method: 'GET'
+            url: urlRequest,
+            method: 'GET',
         })
             .then(res => {
                 dispatch({
-                    type: 'GET_LIST_FROM_SERVER', payload: res.data
+                    type: 'GET_CRYPTO_PRICE', payload: res.data['DISPLAY']
                 })
             })
-            .catch(function (error) {
-                console.log(error);
+            .catch(error => {
+                console.log(error)
             })
     }
 }

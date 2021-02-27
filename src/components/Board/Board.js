@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from 'react';
-
+import React, {useEffect} from 'react';
 import {v4 as uuidv4} from 'uuid';
 import Column from "../Column/Column";
-import {cryptoCurrencies, features} from "../../utils/priority"
+import {cryptoCurrencies, features} from "../../utils/utils"
 import {connect} from "react-redux";
 import "./Board.css"
-import io from "socket.io-client";
 
 
 function Board(props) {
@@ -48,13 +46,9 @@ function Board(props) {
 
     })
     useEffect(() => {
-        const socket = io("http://localhost:5000", {transports: ['websocket']});
+        getFullList()
 
-        socket.on('change', (dataFromDB) => {
-            console.log('CHANGE', dataFromDB)
-            console.log("DATA", data)
-        })
-    }, [])
+    }, [getFullList]);
 
     return (
         <table className="board">
@@ -86,6 +80,7 @@ const mapStateToProps = (state) => ({
 
 
 const mapDispatchToProps = (dispatch) => ({
+
     getFullList: () => dispatch({type: "GET_STATE"}),
 
 });
